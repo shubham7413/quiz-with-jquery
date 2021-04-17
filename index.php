@@ -9,6 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
 
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 </head>
 
 <body>
@@ -45,10 +46,10 @@
             xhttp.onreadystatechange = function() {
                 if (this.readyState == 4 && this.status == 200) {
 
-                    // window.show = this.responseText;
-                    // show = JSON.parse(show);
+                    window.show = this.responseText;
+                    show = JSON.parse(show);
                     // document.getElementById('ques').innerHTML = show.ans;
-                    // console.log(show);
+                    console.log(show);
                     mycallback(this);
                 }
             };
@@ -58,16 +59,19 @@
         }
 
         function game_start() {
-            
+
             get_ques(display_ques);
 
         }
-        function play_again(){
+
+        function play_again() {
             for (let i = 1; i <= 4; i++) {
-                    let option = 'option-button-' + i;
-                    document.getElementById(option).style.backgroundColor = '#0037ff';
-                }
-            document.getElementById('game-end').style.display = 'none';
+                let option = 'option-button-' + i;
+                // document.getElementById(option).style.backgroundColor = '#0037ff';
+                $("#"+option).css("background-color", "#0037ff");
+            }
+            // document.getElementById('game-end').style.display = 'none';
+            $("#game-end").hide();
             get_ques(display_ques);
         }
     </script>
@@ -127,14 +131,16 @@
     </audio>
     <script>
         function output(id, value) {
-            document.getElementById(id).innerHTML = value;
+            $("#"+id).text(value);
+            // document.getElementById(id).innerHTML = value;
         }
 
         function display_ques(xhttp) {
             // 
             window.myobj = xhttp.responseText;
             myobj = JSON.parse(myobj);
-            document.getElementById('game-start').style.display = "none";
+            $("#game-start").hide();
+            // document.getElementById('game-start').style.display = "none";
             ques = myobj.ques;
             option_1 = myobj.option_1;
             option_2 = myobj.option_2;
@@ -142,7 +148,7 @@
             option_4 = myobj.option_4;
             ans = myobj.ans;
             ques_no += 1;
-
+            console.log(option_1);
             output('ques', ques);
             output('option-1', option_1);
             output('option-2', option_2);
@@ -177,7 +183,7 @@
                 time_left = 0;
                 clearInterval(timer);
                 wrong("Time's Up");
-                
+
             }
             output('time', time_left);
         }
@@ -187,7 +193,8 @@
             setTimeout(function() {
                 for (let i = 1; i <= 4; i++) {
                     let option = 'option-button-' + i;
-                    document.getElementById(option).style.backgroundColor = '#0037ff';
+                    $("#"+option).css("background-color", "#0037ff");
+                    // document.getElementById(option).style.backgroundColor = '#0037ff';
                 }
                 get_ques(display_ques);
 
@@ -196,7 +203,8 @@
 
         function wrong(detail) {
             setTimeout(function() {
-                document.getElementById('game-end').style.display = 'block';
+                $("#game-end").show();
+                // document.getElementById('game-end').style.display = 'block';
                 output('score', score);
                 output('game-end-detail', detail);
             }, 2000);
@@ -206,11 +214,13 @@
             let option = 'option-button-' + option_no;
 
             if (ans == option_no) {
-                document.getElementById(option).style.backgroundColor = 'rgb(92, 255, 59)';
+                $("#"+option).css("background-color","rgb(92, 255, 59)");
+                // document.getElementById(option).style.backgroundColor = 'rgb(92, 255, 59)';
                 clearInterval(timer);
                 correct();
             } else {
-                document.getElementById(option).style.backgroundColor = 'Red';
+                $("#"+option).css("background-color","red");
+                // document.getElementById(option).style.backgroundColor = 'Red';
                 clearInterval(timer);
                 wrong('Wrong Ans');
             }
